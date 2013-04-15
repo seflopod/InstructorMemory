@@ -60,11 +60,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Board.h" />
+    <ClInclude Include="board.h" />
+    <ClInclude Include="color3.h" />
+    <ClInclude Include="colorscheme.h" />
+    <ClInclude Include="deck.h" />
     <ClInclude Include="game.h" />
     <ClInclude Include="idrawable.h" />
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="mouse.h" />
+    <ClInclude Include="player.h" />
+    <ClInclude Include="vector2.h" />
+    <ClInclude Include="vector3.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="colorscheme.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="vector2.cpp" />
+    <ClCompile Include="vector3.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

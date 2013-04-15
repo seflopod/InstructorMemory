@@ -36,7 +36,7 @@
 //given that Color will probably be used by classes that draw, including it here
 //saves some further includes down the road.
 #include "color3.h"
-#include "ColorScheme.h"
+#include "colorscheme.h"
 
 class IDrawable
 {
@@ -74,7 +74,7 @@ public:
      * priority for drawing an implementation.
      *
      */
-    int getPriority();
+    virtual int getPriority()=0;
     
     /*setPriority(priority)
      * takes: an int to indicate the draw priority
@@ -84,7 +84,7 @@ public:
      * use with a priority queue.
      *
      */
-    void setPriority(int);
+    virtual void setPriority(int)=0;
     
     /*draw()
      * takes: nothing
