@@ -61,6 +61,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="board.h" />
+    <ClInclude Include="Card.h" />
     <ClInclude Include="color3.h" />
     <ClInclude Include="colorscheme.h" />
     <ClInclude Include="deck.h" />
@@ -69,12 +70,15 @@
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="Texture2D.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Card.cpp" />
     <ClCompile Include="colorscheme.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="vector2.cpp" />
     <ClCompile Include="vector3.cpp" />
   </ItemGroup>
