@@ -29,23 +29,36 @@ class Player;
 class Game
 {
 public:
+	static const int WINDOW_WIDTH = 800;
+	static const int WINDOW_HEIGHT = 600;
+	static const int HBOUND = 800;
+	static const int VBOUND = 600;
+	static const int FPS = 27;
+	
 	static Game* instance();
 	static void display();
 	static void update(int value);
 
 	void init();
-
+	void registerDrawable(IDrawable* newDrawable);
+	void registerUpdatable(IUpdatable* newUpdatable);
 	Board* getBoard();
 
+	
 	void destroy();
 private:
 	static Game* _instance;
 
 	Game();
-
+	
+	void loadAndBindTextures();
+	//use this for when we can actually prompt for user info
+	//void createPlayers();
+	priority_queue<IDrawable*> _drawables;
+	vector<IUpdatables*> _updatables;
+	
 	Board _board;
 	Player _players[2];
 	Deck _deck;
-	Card** 
 };
 #endif
