@@ -9,6 +9,9 @@
 #include "Card.h"
 #include "colorscheme.h"
 #include "game.h"
+#include "Board.h"
+#include "Card.h"
+#include "player.h"
 
 using namespace std;
 
@@ -107,9 +110,9 @@ void mouseButton(int button,int state,int x,int y)
 	x = -1 * ((windowWidth / 2) - x - 1);
 	y = ((windowHeight / 2) - y - 1);
 
-	//TODO: rewrite so that 0,0 is at bottom left
-	//x = (x / (windowWidth / 2.0)) * bound;
-	//y = (y / (windowHeight / 2.0)) * bound;
+	//convert local screen to glOrtho (the world coordinates we created)
+	float newX = (x/(windowWidth/2.0f) * Game::HBOUND + Game::HBOUND)/2; //technically xBound
+	float newY = (y/(windowHeight/2.0f) * Game::VBOUND + Game::VBOUND)/2; //technically yBound.
 	button = (1 << button);
 	
 	//TODO: put in enum
@@ -124,7 +127,7 @@ void mouseButton(int button,int state,int x,int y)
 		{
 		case LEFT_MOUSE:
 			{
-
+				Game::instance()->getCurrentPlayer()->selectCard()->flip();
 			}
 		case RIGHT_MOUSE:
 			{
@@ -142,10 +145,11 @@ void mousePassive(int x, int y)
 	x = -1 * ((windowWidth / 2) - x - 1);
 	y = ((windowHeight / 2) - y - 1);
 
-	//TODO: rewrite so that 0,0 is at bottom left
-	//x = (x / (windowWidth / 2.0)) * bound;
-	//y = (y / (windowHeight / 2.0)) * bound;
-
+	//convert local screen to glOrtho (the world coordinates we created)
+	float newX = (x/(windowWidth/2.0f) * Game::HBOUND + Game::HBOUND)/2; //technically xBound
+	float newY = (y/(windowHeight/2.0f) * Game::VBOUND + Game::VBOUND)/2; //technically yBound.
+	//cerr << newX << ", " << newY << endl;
+	Game::instance()->getCurrentPlayer()->moveTo(newX, newY);
 	//TODO: write code for functionality re: Player and Mouse class
 }
 

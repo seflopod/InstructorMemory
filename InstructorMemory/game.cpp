@@ -7,11 +7,7 @@
 #include "Board.h"
 #include "Card.h"
 
-const int WINDOW_WIDTH = 800;
-const int WINDOW_HEIGHT = 600;
-const int HBOUND = 800;
-const int VBOUND = 600;
-const int FPS = 27;
+Game* Game::_instance = 0;
 
 //ctor up here for courtesy, but remember it's private
 Game::Game()
@@ -24,8 +20,9 @@ Game::Game()
 	_cardBackTexId = 0;
 	_boardTexId = 0;
 	_playerTexId = 0;
-    _drawables = priority_queue<IDrawable*>();
+    //_drawables = priority_queue<IDrawable*>();
     _updatables = vector<IUpdatable*>();
+	_curPlayer = 0;
 }
 
 Game* Game::instance()
@@ -75,7 +72,7 @@ void Game::init(int difficulty)
     //create the Board
     int rows = 4, cols = 5;
     _board->init(rows, cols);
-
+	_board->enable(); //allow board to draw
     //init the Deck
     _deck->init(0,0,20); //init the deck with no cards for ease
 
@@ -86,11 +83,15 @@ void Game::init(int difficulty)
     for(int i=0;i<10;++i)
     {
         tmpC = new Card();
-        tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx], _cardBackTexId);
+        //tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx], _cardBackTexId);
+		tmpC->init(Vector2(), 0, 0);
+		tmpC->enable(); //let this card draw
         _deck->placeCardOnDeck(tmpC);
         
         tmpC = new Card();
-        tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx++], _cardBackTexId);
+        //tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx++], _cardBackTexId);
+		tmpC->init(Vector2(), 0, 0);
+		tmpC->enable(); //let this card draw
         _deck->placeCardOnDeck(tmpC);
     }
     tmpC = 0;
@@ -108,7 +109,9 @@ void Game::init(int difficulty)
     for(int i=0;i<2;++i)
     {
         _players[i]->init(true); //make both human for now.
+		_players[i]->disable();
     }
+	_players[_curPlayer]->enable();
 }
 
 void Game::registerDrawable(IDrawable* newDrawable)
@@ -129,6 +132,9 @@ Player* Game::getPlayer(int number)
     else
         return 0;
 }
+
+Player* Game::getCurrentPlayer() { return _players[_curPlayer]; }
+void Game::switchPlayers() { _curPlayer = (_curPlayer==0)?1:0; }
 
 void Game::destroy()
 {

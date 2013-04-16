@@ -3,6 +3,7 @@
 #endif
 
 #include <stdlib.h>
+#include "game.h"
 #include "Card.h"
 
 using std::rand;
@@ -23,8 +24,12 @@ void Deck::init(Card** cardArray, int nCards, int maxCards=52)
 	_nCards = nCards;
 	_maxCards = maxCards;
 
+	if(_cards==0)
+		_cards = new Card*[maxCards];
+
 	//set other variables
 	_drawPriority = 5;
+	Game::instance()->registerDrawable((IDrawable*)this);
 }
 
 void Deck::shuffleDeck()
@@ -102,6 +107,5 @@ void Deck::setPriority(int newPriority) { _drawPriority = newPriority;}
 
 void Deck::draw()
 {
-	int x = 5;
 	//TODO figure out how decks are drawn.
 }

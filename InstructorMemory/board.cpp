@@ -4,14 +4,7 @@
 
 #include "game.h"
 #include "Card.h"
-
-const float CARD_WIDTH = 90.0f;
-const float CARD_HEIGHT = 140.0f;
-//TODO: define this shit when we have layout.
-const float SIDE_MARGIN;
-const float CARD_HMARGIN;
-const float VERT_MARGIN;
-const float CARD_VMARGIN;
+#include "colorscheme.h"
 
 Board::Board()
 {
@@ -20,6 +13,7 @@ Board::Board()
 	_cols = 0;
 	_canDraw = false;
 	_drawPriority = -1;
+	_cards = vector<Card*>();
 }
 
 void Board::init(int rows, int cols)
@@ -28,14 +22,23 @@ void Board::init(int rows, int cols)
 	_cols = cols;
 
 	//Setup non-passed variables
+	_center = Vector3(Game::WINDOW_WIDTH/2.0f, Game::WINDOW_HEIGHT/2.0f, 0.0f);
 	_drawPriority = 2;
 	Game::instance()->registerDrawable((IDrawable*)this);
 }
 
 Vector2 Board::XYtoRC(Vector3& xy)
 {
-	float r = (xy.y-VERT_MARGIN-CARD_HEIGHT/2) / (CARD_VMARGIN+CARD_HEIGHT);
-	float c = (xy.x-SIDE_MARGIN-CARD_WIDTH/2) / (CARD_HMARGIN+CARD_WIDTH);
+	float r = std::floor((xy.y - VERT_MARGIN) / (CARD_VMARGIN/2.0f+CARD_HEIGHT));
+	float c = std::floor((xy.x - SIDE_MARGIN) / (CARD_HMARGIN+CARD_WIDTH));
+	if(r<0)
+		r = 0;
+	if(r >= _rows)
+		r = _rows;
+	if(c<0)
+		c = 0;
+	if(c >= _cols)
+		c = _cols;
 	return Vector2(r, c);
 }
 
@@ -48,6 +51,31 @@ Vector3 Board::RCtoXY(Vector2& rc)
 	return Vector3(x, y, 0.0f);
 }
 
+void Board::placeCardOnBoard(int row, int col, Card* card)
+{
+	card->moveToRC(row, col);
+	_cards.push_back(card);
+}
+
+Card* Board::removeCardFromBoard(int row, int col)
+{
+	//TODO: write this
+	return 0;
+}
+
+Card* Board::cardAtRowCol(int row, int col)
+{
+	vector<Card*>::iterator it;
+	for(it=_cards.begin();it!=_cards.end();++it)
+		if((*it)->getRowCol().x==(float)row && (*it)->getRowCol().y==(float)col)
+			return (*it);
+}
+
+void Board::destroy()
+{
+	//Since no pointers I think we're okay here.
+}
+
 void Board::enable() { _canDraw = true; }
 void Board::disable() { _canDraw = false; }
 bool Board::isEnabled() { return _canDraw; }
@@ -56,7 +84,15 @@ void Board::setPriority(int newPriority) { _drawPriority = newPriority; }
 
 void Board::draw()
 {
-	//this is just a simple box with a texture
-	//need to figure out if we want to tile or scale thought
-	//and how to make that happen...
+	//doing this without textures just to make this work.
+	//this should be chopped into squares for tiling the texture
+	//or there's a gl function for doing so.  whatevs
+	Color4 myColor = ColorScheme::GREEN;
+	glBegin(GL_QUADS);
+		glColor4fv(myColor.toArray());
+		glVertex2f(_center.x - Game::WINDOW_WIDTH/2.0f, _center.y - Game::WINDOW_HEIGHT/2.0f);
+		glVertex2f(_center.x + Game::WINDOW_WIDTH/2.0f, _center.y - Game::WINDOW_HEIGHT/2.0f);
+		glVertex2f(_center.x + Game::WINDOW_WIDTH/2.0f, _center.y + Game::WINDOW_HEIGHT/2.0f);
+		glVertex2f(_center.x - Game::WINDOW_WIDTH/2.0f, _center.y + Game::WINDOW_HEIGHT/2.0f);
+	glEnd();
 }

@@ -40,6 +40,9 @@ public:
 	 */
 	void init(Vector2 rowCol, GLuint faceTexId, GLuint backTexId);
 
+	//NEED COMMENT!
+	void moveToRC(int row, int col);
+
 	/*collideWithCard(position)
 	 * takes: a Vector3 representing the position to check
 	 * returns: true if that position collides with the Card; false otherwise.
@@ -92,6 +95,8 @@ public:
 	 */
 	void setBackTextureId(GLuint backTex);
 
+	Vector2& getRowCol();
+
 	//IUpdtable implementation
 	virtual void enableUpdates();
 	virtual void disableUpdates();
@@ -117,5 +122,7 @@ private:
 	float _wPct;
 	bool _flipping;
 	float _flipSpeed;
+	Color4 _faceColor;
+	Color4 _backColor;
 };
 #endif

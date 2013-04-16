@@ -18,6 +18,7 @@
 #include <queue>
 #include <time.h>
 #include "idrawable.h"
+#include "idrawablecompare.h"
 #include "iupdatable.h"
 
 using std::vector;
@@ -32,11 +33,11 @@ class Player;
 class Game
 {
 public:
-	static const int WINDOW_WIDTH;
-	static const int WINDOW_HEIGHT;
-	static const int HBOUND;
-	static const int VBOUND;
-	static const int FPS;
+	static const int WINDOW_WIDTH = 800;
+	static const int WINDOW_HEIGHT = 600;
+	static const int HBOUND = 800;
+	static const int VBOUND = 600;
+	static const int FPS = 27;
 	
 	static Game* instance();
 	static void display();
@@ -47,7 +48,8 @@ public:
 	void registerUpdatable(IUpdatable* newUpdatable);
 	Board* getBoard();
 	Player* getPlayer(int number);
-
+	Player* getCurrentPlayer();
+	void switchPlayers();
 	
 	void destroy();
 private:
@@ -61,7 +63,7 @@ private:
 	clock_t _currentTime;
 	clock_t _lastCurrentTime;
 	
-	priority_queue<IDrawable*> _drawables;
+	priority_queue<IDrawable*, vector<IDrawable*>, IDrawableCompare> _drawables;
 	vector<IUpdatable*> _updatables;
 	GLuint* _cardFaceTexIds;
 	GLuint _cardBackTexId;
@@ -71,5 +73,7 @@ private:
 	Board* _board;
 	Player* _players[2];
 	Deck* _deck;
+
+	int _curPlayer;
 };
 #endif

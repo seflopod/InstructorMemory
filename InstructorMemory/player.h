@@ -64,7 +64,7 @@ public:
 	 * returns: the Deck made up of the pairs the Player has found
 	 *
 	 */
-	Deck getPairsDeck();
+	Deck* getPairsDeck();
 
 	/*addPair(card)
 	 * takes: a pointer to a Card representing the pair the Player has found
@@ -104,7 +104,9 @@ public:
 	 * If no Card exists at the passed position, NULL is returned.
 	 *
 	 */
-	Card* selectCard(Vector3 position);
+	Card* selectCard();
+
+	void moveTo(float x, float y);
 
 	/*destroy()
 	 * takes: nothing
@@ -127,10 +129,11 @@ public:
 private:
 	bool _human;
 	string _name;
-	Deck _pairsDeck;
+	Deck* _pairsDeck;
 	int _pairsFound;
 	bool _canDraw;
 	int _drawPriority;
 	Vector3 _center;
+	Color4 _color;
 };
 #endif

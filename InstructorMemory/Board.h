@@ -16,9 +16,12 @@
 #ifndef _BOARD_H_
 #define _BOARD_H_
 
+#include <vector>
 #include "idrawable.h"
 #include "vector2.h"
 #include "vector3.h"
+
+using std::vector;
 
 class Card;
 
@@ -29,12 +32,12 @@ public:
 	//do coordinate conversions.  The Board will define the size of
 	//each card for uniformity.  This is static to get around the 
 	//fact that this is probably bad design.
-	const float CARD_WIDTH;
-	const float CARD_HEIGHT;
-	const float SIDE_MARGIN;
-	const float CARD_HMARGIN;
-	const float VERT_MARGIN;
-	const float CARD_VMARGIN;
+	static const int CARD_WIDTH = 90;
+	static const int CARD_HEIGHT = 140;
+	static const int SIDE_MARGIN = 25;
+	static const int CARD_HMARGIN = 75;
+	static const int VERT_MARGIN = 8;
+	static const int CARD_VMARGIN = 8;
 
     /*Board()
      * takes: nothing
@@ -98,6 +101,7 @@ public:
      */
     Card* removeCardFromBoard(int, int);
     
+	Card* cardAtRowCol(int row, int col);
     /*destroy()
      * takes: nothing
      * returns: nothing
@@ -118,7 +122,7 @@ private:
     Vector3 _center;
     int _rows;
     int _cols;
-    Card* _cards;
+    vector<Card*> _cards;
     bool _canDraw;
     int _drawPriority;
 };

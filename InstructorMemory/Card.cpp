@@ -3,6 +3,7 @@
 #endif
 
 #include "game.h"
+#include "player.h"
 #include "board.h"
 
 Card::Card()
@@ -18,6 +19,8 @@ Card::Card()
 	_wPct = 0.0f;
 	_flipSpeed = 0.0f;
 	_flipping = false;
+	_faceColor = Color4();
+	_backColor = Color4();
 }
 
 void Card::init(Vector2 rowCol, GLuint faceTexId, GLuint backTexId)
@@ -27,13 +30,21 @@ void Card::init(Vector2 rowCol, GLuint faceTexId, GLuint backTexId)
 	_backTex = backTexId;
 
 	//change variables that need changing from default ctor
-	_drawPriority = 5;
+	_drawPriority = 10;
 	_center = Game::instance()->getBoard()->RCtoXY(_rowCol);
 	_wPct = 1.0f;
 	_flipSpeed = 0.1f;
 	_flipping = false;
 	Game::instance()->registerDrawable((IDrawable*)this);
 	Game::instance()->registerUpdatable((IUpdatable*)this);
+	_faceColor = ColorScheme::YELLOW;
+	_backColor = ColorScheme::RED;
+}
+
+void Card::moveToRC(int row, int col)
+{
+	_rowCol.x = row;
+	_rowCol.y = col;
 }
 
 bool Card::collideWithCard(Vector3 position)
@@ -61,13 +72,15 @@ void Card::setFaceTextureId(GLuint faceTex) { _faceTex = faceTex; }
 GLuint Card::getBackTextureId() { return _backTex; }
 void Card::setBackTextureId(GLuint backTex) { _backTex = backTex; }
 
+Vector2& Card::getRowCol() { return _rowCol; }
+
 //IUpdatable implementation
 void Card::enableUpdates() { _canUpdate = true; }
 void Card::disableUpdates() { _canUpdate = false; }
 bool Card::canUpdate() { return _canUpdate; }
 void Card::update(float dt)
 {
-	_wPct+=((_flipping)-1:1)*_flipSpeed;
+	_wPct+=((_flipping)?-1:1)*_flipSpeed;
 	if(_flipping && _wPct <= 0)
 	{
 		_wPct = 0.0f;
@@ -95,25 +108,36 @@ void Card::draw()
 
 	Vector3 pos = Game::instance()->getBoard()->RCtoXY(_rowCol);
 
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, _backTex);
-	
-	glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+	//glEnable(GL_TEXTURE_2D);
+	Color3 myColor;
+	if(_showFace)
+	{
+		//glBindTexture(GL_TEXTURE_2D, _faceTex);
+		myColor = _faceColor;
+	}
+	else
+	{
+		//glBindTexture(GL_TEXTURE_2D, _backTex);
+		myColor = _backColor;
+	}
+
+	//glTexEnvf(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 	glBegin(GL_QUADS);
+		glColor4fv(myColor.toArray());
 		//Need to update the texture coordinates for when we know how
 		//they're actuall in here.
-		glTexCoord2f(0,1);
-		glVertex2f(pos.x - Game::instance()->getBoard()->CARD_WIDTH,
-					pos.y + Game::instance()->getBoard()->CARD_HEIGHT);
-		glTexCoord2f(0,0);
-		glVertex2f(pos.x - Game::instance()->getBoard()->CARD_WIDTH,
-					pos.y - Game::instance()->getBoard()->CARD_HEIGHT);
-		glTexCoord2f(1,0);
-		glVertex2f(pos.x + Game::instance()->getBoard()->CARD_WIDTH,
-					pos.y - Game::instance()->getBoard()->CARD_HEIGHT);
-		glTexCoord2f(1,1);
-		glVertex2f(pos.x + Game::instance()->getBoard()->CARD_WIDTH,
-					pos.y + Game::instance()->getBoard()->CARD_HEIGHT);
+		//glTexCoord2f(0,1);
+		glVertex2f(pos.x - _wPct*Board::CARD_WIDTH/2.0f,
+					pos.y + Board::CARD_HEIGHT/2.0f);
+		//glTexCoord2f(0,0);
+		glVertex2f(pos.x - _wPct*Board::CARD_WIDTH/2.0f,
+					pos.y - Board::CARD_HEIGHT/2.0f);
+		//glTexCoord2f(1,0);
+		glVertex2f(pos.x + _wPct*Board::CARD_WIDTH/2.0f,
+					pos.y - Board::CARD_HEIGHT/2.0f);
+		//glTexCoord2f(1,1);
+		glVertex2f(pos.x + _wPct*Board::CARD_WIDTH/2.0f,
+					pos.y + Board::CARD_HEIGHT/2.0f);
 	glEnd();
-	glDisable(GL_TEXTURE_2D);
+	//glDisable(GL_TEXTURE_2D);
 }

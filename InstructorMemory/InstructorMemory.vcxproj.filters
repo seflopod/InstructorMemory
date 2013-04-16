@@ -57,6 +57,12 @@
     <ClInclude Include="iupdatable.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="idrawablecompare.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="color4.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vector3.cpp">
@@ -84,6 +90,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="game.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="player.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

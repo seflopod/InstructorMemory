@@ -12,13 +12,16 @@
 #ifndef _COLORSCHEME_H_
 #define _COLORSCHEME_H_
 
-class Color3;
+class Color4;
 
 class ColorScheme
 {
 public:
-	static const Color3 WHITE;
-	static const Color3 BLACK;
-	static const Color3 BLUE_BALLS;
+	static const Color4 WHITE;
+	static const Color4 BLACK;
+	static const Color4 BLUE_BALLS;
+	static const Color4 GREEN;
+	static const Color4 RED;
+	static const Color4 YELLOW;
 };
 #endif
