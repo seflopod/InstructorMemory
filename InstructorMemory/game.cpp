@@ -35,9 +35,11 @@ void Game::display()
 {
     if(_drawables.size() > 0)
     {
+        glClear(GL_COLOR_BUFFER_BIT);
         //http://www.cplusplus.com/forum/general/26791/
         for(int i=0;i<_drawables.size();++i)
             (&_drawables.top())[i]->draw();
+        glutSwapBuffers();
     }
 }
 
@@ -45,8 +47,9 @@ void Game::update(int value)
 {
     if(_updatables.size() > 0)
     {
-        float dt = 0.05f;
-        //actually calc dt
+        currentTime = clock();
+        float dt = difftime(currentTime, lastCurrentTime);
+        
         vector<IUpdatable*>::iterator it;
         vector<Iupdatable*>* u = instance()->_updtables;
         for(it=u->begin();it!=u->end();;++it)
