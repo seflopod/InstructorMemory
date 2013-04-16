@@ -19,5 +19,6 @@ class ColorScheme
 public:
 	static const Color3 WHITE;
 	static const Color3 BLACK;
+	static const Color3 BLUE_BALLS;
 };
 #endif
