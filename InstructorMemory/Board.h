@@ -10,9 +10,7 @@
  * its texture and/or color.  It also keeps track of the number of rows and
  * columns it has for placing Cards.  It has maximum values for x and y which
  * allows it to have the Vector2 functions that convert between (row,column) and
- * (x,y).  The Board does not need to be aware of the cards on it, it only
- * defines a space for Cards to go.  It does need to know if a Card occupies
- * space however, so an array of bools is required.
+ * (x,y).
  *
  */
 #ifndef _BOARD_H_
@@ -57,6 +55,13 @@ public:
      */
     void init(int, int);
     
+    /*positionBoard(center)
+     * takes: a Vector3 for the Board's position
+     * returns: nothing
+     *
+     */
+    void positionBoard(Vector3&);
+    
     /*XYtoRC(&xyCoords)
      * takes: a reference to a Vector3 containing coordinate data
      * returns: a new Vector2 object that holds row, column data
@@ -77,6 +82,29 @@ public:
      */
     Vector3 RCtoXY(Vector2&);
     
+    /*placeCardOnBoard(row, col, card)
+     * takes: a pointer to the Card to place on the board and its position.
+     * returns: nothing
+     *
+     */
+    void placeCardOnBoard(int, int, Card*);
+    
+    /*removeCardFromBoard(row, col)
+     * takes: the row and column for the card to remove
+     * returns: a poitner to the Card removed
+     *
+     */
+    Card* removeCardFromBoard(int, int);
+    
+    /*destroy()
+     * takes: nothing
+     * returns: nothing
+     *
+     * dtor replacement
+     *
+     */
+    void destroy();
+    
     //IDrawable implementation
     virtual void enable();
     virtual void disable();
@@ -84,10 +112,11 @@ public:
     virtual int getPriority();
     virtual void setPriority(int);
     virtual void draw();
-private
+private:
     Vector3 _center;
     int _rows;
     int _cols;
+    Card* _cards;
     bool _canDraw;
     int _drawPriority;
 };
