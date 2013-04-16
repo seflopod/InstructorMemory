@@ -1,5 +1,4 @@
 
-
 #include <iostream>
 #include <GL\freeglut.h>
 #define _USE_MATHE_DEFINES
@@ -9,6 +8,7 @@
 #include "Texture2D.h"
 #include "Card.h"
 #include "colorscheme.h"
+#include "game.h"
 
 using namespace std;
 
@@ -82,37 +82,9 @@ void initOpenGL()
 	glClearColor(0,0,0,0);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-bound,bound,-bound,bound,-bound,bound);
+	glOrtho(0,Game::HBOUND, 0,Game::VBOUND, -1.0f, 1.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-void initGame()
-{	
-	int xStart = -85;
-	int yStart = 85;
-	
-	//this is the math for how the cards will draw
-	for(int r = 0; r < 10; ++r) 
-	{
-		for(int c = 0; c < 10; ++c)
-		{
-			cards[r][c] = Card();
-			cards[r][c].x = xStart;
-			cards[r][c].y = yStart;
-			xStart += cards[r][c].cardSize * 2 + 1;
-		}
-		xStart = -85;
-		yStart -= cards[r][0].cardSize * 2 + 1;
-	}
-
-	//background = Card();
-	//background.cardSize = 100;
-
-	buildTextures();
-
-	currentTime = clock();
-	lastCurrentTime = currentTime;
 }
 
 void reshape(int width, int height)
@@ -125,41 +97,9 @@ void reshape(int width, int height)
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	glOrtho(-bound,bound,-bound,bound,-bound,bound);
+	glOrtho(0,Game::HBOUND, 0,Game::VBOUND, -1.0f, 1.0f);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-}
-
-void display()
-{
-	
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	//this is where I draw my background
-	//background.drawBackground(brickTexture);
-
-	//this is where the cards are drawn
-	for(int r = 0; r < 10; ++r)
-	{
-		for(int c = 0; c < 10; ++c)
-		{
-			cards[r][c].draw();
-		}
-	}
-	
-	glutSwapBuffers();
-}
-
-void update(int value)
-{
-	lastCurrentTime = currentTime;
-	currentTime = clock();
-
-	float deltaT = difftime(currentTime, lastCurrentTime) / 10000.0;
-	float deltaTSqDiv2 = (deltaT * deltaT) * 0.5;
-
-	glutTimerFunc(fps,update,0);
-	glutPostRedisplay();
 }
 
 void keyboard(unsigned char key, int x, int y)
@@ -239,20 +179,20 @@ int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
 	glutInitWindowPosition(500, 100);
-	glutInitWindowSize(1000,1000);
+	glutInitWindowSize(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
-	glutCreateWindow("A5");
+	glutCreateWindow("Instructor Memory - A Peter & Ross Joint");
 
 	initOpenGL();
-	initGame();
+	Game::instance()->init(1);
 
-	glutDisplayFunc(display);
+	glutDisplayFunc(Game::display);
 	glutReshapeFunc(reshape);
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouseButton);
 	glutPassiveMotionFunc(mousePassive);
-	glutTimerFunc(fps, update, 0);
+	glutTimerFunc(fps, Game::update, 0);
 	glutMainLoop();
-
+	Game::instance()->destroy();
 	return 0;
 }
