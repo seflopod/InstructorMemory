@@ -109,7 +109,7 @@ public:
      */
     bool operator()(IDrawable& d1, IDrawable& d2)
     {
-       return (d1.getPrioirty() < d2.getPriority());
+       return (d1.getPriority() < d2.getPriority());
     }
 };
 #endif

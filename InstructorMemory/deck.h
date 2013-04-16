@@ -24,6 +24,7 @@
 #define _DECK_H_
 
 #include "idrawable.h"
+#include "vector3.h"
 
 class Card;
 
@@ -54,7 +55,7 @@ public:
 	 * recreating the Deck.
 	 *
 	 */
-	void init(Card** cardArray, int nCards, int maxCards=52);
+	void init(Card** cardArray, int nCards, int maxCards);
 
 	/*shuffleDeck()
 	 * takes: nothing

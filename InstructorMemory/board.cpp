@@ -2,6 +2,17 @@
 #include "board.h"
 #endif
 
+#include "game.h"
+#include "Card.h"
+
+const float CARD_WIDTH = 90.0f;
+const float CARD_HEIGHT = 140.0f;
+//TODO: define this shit when we have layout.
+const float SIDE_MARGIN;
+const float CARD_HMARGIN;
+const float VERT_MARGIN;
+const float CARD_VMARGIN;
+
 Board::Board()
 {
 	_center = Vector3();
@@ -18,6 +29,7 @@ void Board::init(int rows, int cols)
 
 	//Setup non-passed variables
 	_drawPriority = 2;
+	Game::instance()->registerDrawable((IDrawable*)this);
 }
 
 Vector2 Board::XYtoRC(Vector3& xy)

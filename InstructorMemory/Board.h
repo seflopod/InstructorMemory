@@ -20,6 +20,8 @@
 #include "vector2.h"
 #include "vector3.h"
 
+class Card;
+
 class Board : public IDrawable
 {
 public:
@@ -27,8 +29,8 @@ public:
 	//do coordinate conversions.  The Board will define the size of
 	//each card for uniformity.  This is static to get around the 
 	//fact that this is probably bad design.
-	const float CARD_WIDTH = 90.0f;
-	const float CARD_HEIGHT = 140.0f;
+	const float CARD_WIDTH;
+	const float CARD_HEIGHT;
 	const float SIDE_MARGIN;
 	const float CARD_HMARGIN;
 	const float VERT_MARGIN;

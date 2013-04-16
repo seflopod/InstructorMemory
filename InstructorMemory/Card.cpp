@@ -32,6 +32,8 @@ void Card::init(Vector2 rowCol, GLuint faceTexId, GLuint backTexId)
 	_wPct = 1.0f;
 	_flipSpeed = 0.1f;
 	_flipping = false;
+	Game::instance()->registerDrawable((IDrawable*)this);
+	Game::instance()->registerUpdatable((IUpdatable*)this);
 }
 
 bool Card::collideWithCard(Vector3 position)
@@ -88,6 +90,9 @@ void Card::setPriority(int newPriority) { _drawPriority = newPriority; }
 
 void Card::draw()
 {
+	if(!_canDraw)
+		return;
+
 	Vector3 pos = Game::instance()->getBoard()->RCtoXY(_rowCol);
 
 	glEnable(GL_TEXTURE_2D);

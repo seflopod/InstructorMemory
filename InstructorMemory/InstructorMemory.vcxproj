@@ -80,6 +80,7 @@
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="colorscheme.cpp" />
     <ClCompile Include="deck.cpp" />
+    <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="vector2.cpp" />

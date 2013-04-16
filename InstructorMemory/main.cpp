@@ -12,33 +12,16 @@
 
 using namespace std;
 
-void display();
 void keyboard(unsigned char key, int x, int y);
 void mouseButton(int button, int state, int x, int y);
 void mousePassive();
 void reshape(int w, int h);
 void initOpenGL();
-void initGame();
-void update(int value);
 
-Card cards [4][5];
+int windowWidth;
+int windowHeight;
 
-const int fps = 27;
-
-clock_t currentTime;
-clock_t lastCurrentTime;
-
-int windowWidth = 800;
-int windowHeight = 600;
-int bound = 550;
-
-Texture2D* boardT2D;
-Texture2D* cardBackT2D;
-Texture2D* cardFaceT2D;
-GLuint boardTex;
-GLuint backTex;
-GLuint faceTex;
-
+/*TODO: move this to Game when we are actually doing stuff with textures
 void buildTextures()
 {
 	boardT2D = new Texture2D("Content\\board.bmp");
@@ -73,7 +56,7 @@ void buildTextures()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 	
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cardFaceT2D -> width, cardFaceT2D -> height, 0, GL_RGB, GL_UNSIGNED_BYTE, cardFaceT2D -> pixels);
-}
+}*/
 
 void initOpenGL()
 {
@@ -89,11 +72,12 @@ void initOpenGL()
 
 void reshape(int width, int height)
 {
-	glutReshapeWindow(width,height);
-	glViewport(0,0,width,height);
+	//no reshape for you!
+	glutReshapeWindow(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
+	glViewport(0,0,Game::HBOUND, Game::VBOUND);
 
-	windowWidth = width;
-	windowHeight = height;
+	windowWidth = Game::WINDOW_WIDTH;
+	windowHeight = Game::WINDOW_HEIGHT;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
@@ -104,7 +88,7 @@ void reshape(int width, int height)
 
 void keyboard(unsigned char key, int x, int y)
 {
-
+	//TODO: put in keyboard class if my goddamn bindings work
 	switch(key)
 	{
 	
@@ -123,16 +107,17 @@ void mouseButton(int button,int state,int x,int y)
 	x = -1 * ((windowWidth / 2) - x - 1);
 	y = ((windowHeight / 2) - y - 1);
 
-	x = (x / (windowWidth / 2.0)) * bound;
-	y = (y / (windowHeight / 2.0)) * bound;
+	//TODO: rewrite so that 0,0 is at bottom left
+	//x = (x / (windowWidth / 2.0)) * bound;
+	//y = (y / (windowHeight / 2.0)) * bound;
 	button = (1 << button);
 	
+	//TODO: put in enum
 	const int LEFT_MOUSE = 1;
 	const int MIDDLE_MOUSE = 2;
 	const int RIGHT_MOUSE = 4;
 
-	cerr << x << " " << y << endl;
-
+	//TODO: write code for functionality re: Player and Mouse class
 	if(state == GLUT_DOWN)
 	{
 		switch(button)
@@ -148,6 +133,7 @@ void mouseButton(int button,int state,int x,int y)
 		default: break;
 		}
 	}
+
 	glutPostRedisplay();
 }
 
@@ -156,27 +142,17 @@ void mousePassive(int x, int y)
 	x = -1 * ((windowWidth / 2) - x - 1);
 	y = ((windowHeight / 2) - y - 1);
 
-	x = (x / (windowWidth / 2.0)) * bound;
-	y = (y / (windowHeight / 2.0)) * bound;
+	//TODO: rewrite so that 0,0 is at bottom left
+	//x = (x / (windowWidth / 2.0)) * bound;
+	//y = (y / (windowHeight / 2.0)) * bound;
 
-	for(int r = 0; r < 10; ++r) 
-	{
-		for(int c = 0; c < 10; ++c)
-		{
-			if(cards[r][c].collideWithCard(x,y))
-			{
-				cards[r][c].isLit = true;
-			}
-			else
-			{
-				cards[r][c].isLit = false;
-			}
-		}
-	}
+	//TODO: write code for functionality re: Player and Mouse class
 }
 
 int main(int argc, char** argv)
 {
+	windowWidth = Game::WINDOW_WIDTH;
+	windowHeight = Game::WINDOW_HEIGHT;
 	glutInit(&argc, argv);
 	glutInitWindowPosition(500, 100);
 	glutInitWindowSize(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
@@ -191,7 +167,7 @@ int main(int argc, char** argv)
 	glutKeyboardFunc(keyboard);
 	glutMouseFunc(mouseButton);
 	glutPassiveMotionFunc(mousePassive);
-	glutTimerFunc(fps, Game::update, 0);
+	glutTimerFunc(Game::FPS, Game::update, 0);
 	glutMainLoop();
 	Game::instance()->destroy();
 	return 0;
