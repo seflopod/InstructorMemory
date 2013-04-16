@@ -8,6 +8,7 @@
 
 #include "Texture2D.h"
 #include "Card.h"
+#include "colorscheme.h"
 
 using namespace std;
 

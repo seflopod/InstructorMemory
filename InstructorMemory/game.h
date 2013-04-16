@@ -1,88 +1,30 @@
-/*board.h
+/*game.h
  * Peter Bartosch and Ross Greenman
  * created: 4/13/2013
- * last modified: 4/13/2013
- * IS346 - Instructor Memory
+ * last updated: 4/15/2013
+ * IS346 - InstructorMemory
  * Kahn
  *
- * defines class: Board
- * The Board class implements the IDrawable interface.  It contains data for
- * its texture and/or color.  It also keeps track of the number of rows and
- * columns it has for placing Cards.  It has maximum values for x and y which
- * allows it to have the Vector2 functions that convert between (row,column) and
- * (x,y).  The Board does not need to be aware of the cards on it, it only
- * defines a space for Cards to go.  It does need to know if a Card occupies
- * space however, so an array of bools is required.
+ * defines class: Game
+ * Game is a singleton that holds all information for running the game.  It
+ * contains static methods for registering both display and update.
+ * It does other things too, trust me.
  *
  */
-#ifndef _BOARD_H_
-#define _BOARD_H_
+#ifndef _GAME_H_
+#define _GAME_H_
 
-#include "idrawable.h"
-#include "vector2.h"
-#include "vector3.h"
+//forward declarations to avoid compiler issues
+class Board;
+class Deck;
+class Card;
+class Player;
 
-class Board : public IDrawable
+class Game
 {
 public:
-    /*Board()
-     * takes: nothing
-     * returns: nothing
-     *
-     * Default ctor for the Board.  This does not define anything, this will
-     * only make sure that which needs some form of initialization receives
-     * that init.  Use init for full initialization.
-     *
-     */
-    Board();
-    
-    /*init(rows, cols)
-     * takes: values for the number of rows and the number of columns
-     * returns: nothing
-     *
-     * Initializes all values to default values, and uses the passed row and
-     * column information to setup the bool array for card placement.
-     *
-     */
-    void init(int, int);
-    
-    /*XYtoRC(&xyCoords)
-     * takes: a reference to a Vector3 containing coordinate data
-     * returns: a new Vector2 object that holds row, column data
-     *
-     * This will use the Board's information about xy and rc to convert the
-     * values.  This assumes that the slot given to (row=0,col=0) has its
-     * bottom-left corner at the origin.
-     *
-     */
-    Vector2 XYtoRC(Vector3&);
-    
-    /*RCtoXY(&rcValues)
-     * takes: a reference to a Vector2 containing row, column data
-     * returns a new Vector2 object that holds coordinate data
-     *
-     * Does the opposite of XYtoRC.
-     *
-     */
-    Vector3 RCtoXY(Vector2&);
-    
-    //IDrawable implementation
-    virtual void enable();
-    virtual void disable();
-    virtual bool isEnabled();
-    virtual int getPriority();
-    virtual void setPriority(int);
-    virtual void draw();
-private
-    Vector3 _center;
-    float _maxX;
-    float _maxY;
-    int _rows;
-    int _cols;
-    bool _canDraw;
-    int _drawPriority;
-    Color3 _color;
-    GLuint _textureId;
+	static Game* instance();
+
+	Board* getBoard();
 };
 #endif
- 

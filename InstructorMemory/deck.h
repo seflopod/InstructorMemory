@@ -54,13 +54,15 @@ public:
 	 * recreating the Deck.
 	 *
 	 */
-	void init(Card* cardArray, int nCards, int maxCards=52);
+	void init(Card** cardArray, int nCards, int maxCards=52);
 
 	/*shuffleDeck()
 	 * takes: nothing
 	 * returns: nothing
 	 *
-	 * Shuffles the Card array to create put the Cards in random order.
+	 * Shuffles the Card array to create put the Cards in random order.  This
+	 * assumes that the random seed has already been defined (which should
+	 * happen in Game).
 	 *
 	 */
 	void shuffleDeck();
@@ -76,7 +78,7 @@ public:
 	 * underlying structure and too much effort at the moment.
 	 *
 	 */
-	Card dealCard();
+	Card* dealCard();
 
 	/*dealCard(number)
 	 * takes: the number of Cards to deal
@@ -86,7 +88,7 @@ public:
 	 * a time.
 	 *
 	 */
-	Card* dealCard(int number);
+	Card** dealCard(int number);
 
 	/*placeCardOnDeck(toPlace)
 	 * takes: a Card to place on top of the deck
@@ -95,7 +97,7 @@ public:
 	 * This will put a card on the top of the Deck (like pushing).
 	 *
 	 */
-	void placeCardOnDeck(Card toPlace);
+	void placeCardOnDeck(Card* toPlace);
 
 	/*placeCardsOnDeck(toPlace, nCards)
 	 * takes: an array of Cards and its size
@@ -104,8 +106,10 @@ public:
 	 * A multi-card version of placeCardOnDeck.  The last element of the passed
 	 * array is the last element added.
 	 *
+	 * I don't feel like writing this.  We'll see if it's necessary.
+	 *
 	 */
-	void placeCardsOnDeck(Card* toPlace, int nCards);
+	//void placeCardsOnDeck(Card** toPlace, int nCards);
 
 	/*toArray()
 	 * takes: nothing
@@ -116,7 +120,7 @@ public:
 	 * Deck.
 	 *
 	 */
-	Card* toArray();
+	Card** toArray();
 
 	/*deckSize()
 	 * takes: nothing
@@ -141,7 +145,7 @@ public:
 	 * then Cards will be lost.
 	 *
 	 */
-	void resizeDeck(int newCapacity);
+	//void resizeDeck(int newCapacity);
 
 	/*destroy()
 	 * takes: nothing
@@ -160,11 +164,10 @@ public:
 	virtual int getPriority();
 	virtual void setPriority(int);
 	virtual void draw();
-
 private:
 	int _nCards;
 	int _maxCards;
-	Card* _cards;
+	Card** _cards;
 	bool _canDraw;
 	int _drawPriority;
 	Vector3 _center;

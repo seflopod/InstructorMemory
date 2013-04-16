@@ -25,6 +25,17 @@
 class Board : public IDrawable
 {
 public:
+	//The Board needs to know how big Cards are in order to properly
+	//do coordinate conversions.  The Board will define the size of
+	//each card for uniformity.  This is static to get around the 
+	//fact that this is probably bad design.
+	const float CARD_WIDTH = 90.0f;
+	const float CARD_HEIGHT = 140.0f;
+	const float SIDE_MARGIN;
+	const float CARD_HMARGIN;
+	const float VERT_MARGIN;
+	const float CARD_VMARGIN;
+
     /*Board()
      * takes: nothing
      * returns: nothing
@@ -75,8 +86,6 @@ public:
     virtual void draw();
 private
     Vector3 _center;
-    float _maxX;
-    float _maxY;
     int _rows;
     int _cols;
     bool _canDraw;
