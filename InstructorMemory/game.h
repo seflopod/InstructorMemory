@@ -56,6 +56,10 @@ private:
 	//void createPlayers();
 	priority_queue<IDrawable*> _drawables;
 	vector<IUpdatables*> _updatables;
+	GLuint* _cardFaceTexIds;
+	GLuint _cardBackTexId;
+	GLuint _boardTexId;
+	GLuint _playerTexId;
 	
 	Board _board;
 	Player _players[2];
