@@ -15,10 +15,14 @@
 #define _GAME_H_
 
 #include <vector>
+#include <queue>
+#include <time.h>
 #include "idrawable.h"
 #include "iupdatable.h"
 
 using std::vector;
+using std::priority_queue;
+using std::clock_t;
 
 //forward declarations to avoid compiler issues
 class Board;
@@ -54,6 +58,9 @@ private:
 	void loadAndBindTextures();
 	//use this for when we can actually prompt for user info
 	//void createPlayers();
+	clock_t _currentTime;
+	clock_t _lastCurrentTime;
+	
 	priority_queue<IDrawable*> _drawables;
 	vector<IUpdatables*> _updatables;
 	GLuint* _cardFaceTexIds;
