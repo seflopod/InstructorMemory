@@ -14,6 +14,12 @@
 #ifndef _GAME_H_
 #define _GAME_H_
 
+#include <vector>
+#include "idrawable.h"
+#include "iupdatable.h"
+
+using std::vector;
+
 //forward declarations to avoid compiler issues
 class Board;
 class Deck;
@@ -24,7 +30,22 @@ class Game
 {
 public:
 	static Game* instance();
+	static void display();
+	static void update(int value);
+
+	void init();
 
 	Board* getBoard();
+
+	void destroy();
+private:
+	static Game* _instance;
+
+	Game();
+
+	Board _board;
+	Player _players[2];
+	Deck _deck;
+	Card** 
 };
 #endif

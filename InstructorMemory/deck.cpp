@@ -102,5 +102,6 @@ void Deck::setPriority(int newPriority) { _drawPriority = newPriority;}
 
 void Deck::draw()
 {
+	int x = 5;
 	//TODO figure out how decks are drawn.
 }
