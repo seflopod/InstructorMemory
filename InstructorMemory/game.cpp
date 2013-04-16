@@ -35,10 +35,9 @@ void Game::display()
 {
     if(_drawables.size() > 0)
     {
-        //access _instance through instance to make sure an instance exists
-        //loop over _drawables
-        //need to determine if I can use the underlying vector's [] function, otherwise
-        //need to pop all eleemtns and then recreate pq
+        //http://www.cplusplus.com/forum/general/26791/
+        for(int i=0;i<_drawables.size();++i)
+            (&_drawables.top())[i]->draw();
     }
 }
 
