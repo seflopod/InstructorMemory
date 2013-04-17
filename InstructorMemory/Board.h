@@ -102,6 +102,17 @@ public:
     Card* removeCardFromBoard(int, int);
     
 	Card* cardAtRowCol(int row, int col);
+
+	/*putAllCardsFaceDown()
+	 * takes: nothing
+	 * returns: nothing
+	 * 
+	 * This goes through the Board's list of Card pointers and executes their
+	 * flip method if they are face up.
+	 *
+	 */
+	void putAllCardsFaceDown();
+
     /*destroy()
      * takes: nothing
      * returns: nothing

@@ -127,7 +127,7 @@ void mouseButton(int button,int state,int x,int y)
 		{
 		case LEFT_MOUSE:
 			{
-				Game::instance()->getCurrentPlayer()->selectCard()->flip();
+				Game::instance()->leftClick();
 			}
 		case RIGHT_MOUSE:
 			{

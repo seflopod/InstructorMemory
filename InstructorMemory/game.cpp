@@ -6,6 +6,7 @@
 #include "deck.h"
 #include "Board.h"
 #include "Card.h"
+#include "colorscheme.h"
 
 Game* Game::_instance = 0;
 
@@ -23,6 +24,7 @@ Game::Game()
     //_drawables = priority_queue<IDrawable*>();
     _updatables = vector<IUpdatable*>();
 	_curPlayer = 0;
+	_currentSelect = 0;
 }
 
 Game* Game::instance()
@@ -106,12 +108,11 @@ void Game::init(int difficulty)
     
     //add Players
     //this will change significantly when we actually add ai
-    for(int i=0;i<2;++i)
-    {
-        _players[i]->init(true); //make both human for now.
-		_players[i]->disable();
-    }
-	_players[_curPlayer]->enable();
+	_curPlayer = 0;
+	_players[0]->init(true, ColorScheme::HERZING_WHITE_GRAD);
+	_players[0]->enable();
+	_players[1]->init(true, ColorScheme::HERZING_GOLD_GRAD);
+	_players[1]->disable();
 }
 
 void Game::registerDrawable(IDrawable* newDrawable)
@@ -134,8 +135,32 @@ Player* Game::getPlayer(int number)
 }
 
 Player* Game::getCurrentPlayer() { return _players[_curPlayer]; }
-void Game::switchPlayers() { _curPlayer = (_curPlayer==0)?1:0; }
+void Game::switchPlayers()
+{
+	_players[_curPlayer]->disable();
+	_curPlayer = (_curPlayer==1)?0:1;
+	_players[_curPlayer]->enable();
+}
 
+void Game::leftClick()
+{
+	Card* tmp = _players[_curPlayer]->selectCard();
+	if(tmp != 0)
+	{
+		tmp->flip();
+		if(_currentSelect == 0) //first selection
+		{
+			_currentSelect = tmp;
+		}
+		else
+		{
+			//Check card equality
+			_currentSelect->flip();
+			_currentSelect = 0;
+			switchPlayers();
+		}
+	}
+}
 void Game::destroy()
 {
     _board->destroy();

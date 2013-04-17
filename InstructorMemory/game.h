@@ -50,6 +50,7 @@ public:
 	Player* getPlayer(int number);
 	Player* getCurrentPlayer();
 	void switchPlayers();
+	void leftClick();
 	
 	void destroy();
 private:
@@ -73,7 +74,8 @@ private:
 	Board* _board;
 	Player* _players[2];
 	Deck* _deck;
-
+	
 	int _curPlayer;
+	Card* _currentSelect;
 };
 #endif

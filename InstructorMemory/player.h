@@ -50,7 +50,7 @@ public:
 	 * needed inits.
 	 *
 	 */
-	void init(bool isHuman);
+	void init(bool isHuman, const Color4 cGrad[2]);
 
 	/*getPairsFound()
 	 * takes: nothing
@@ -134,6 +134,7 @@ private:
 	bool _canDraw;
 	int _drawPriority;
 	Vector3 _center;
-	Color4 _color;
+	Color4 _color1;
+	Color4 _color2;
 };
 #endif

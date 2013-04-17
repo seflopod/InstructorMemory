@@ -28,11 +28,14 @@ Player::Player()
 
 	int _pairsFound = 0;
 	int _drawPriority = 0;
-	_color = ColorScheme::BLUE_BALLS;
+	_color1 = ColorScheme::HERZING_GOLD_GRAD[0];
+	_color2 = ColorScheme::HERZING_GOLD_GRAD[1];
 }
 
-void Player::init(bool isHuman)
+void Player::init(bool isHuman, const Color4 cGrad[2])
 {
+	_color1 = cGrad[0];
+	_color2 = cGrad[1];
 	_drawPriority = 12;
 	Game::instance()->registerDrawable((IDrawable*)this);
 	if(isHuman)
@@ -64,7 +67,7 @@ void Player::name(string newName)
 Card* Player::selectCard()
 {
 	Vector2 rc = Game::instance()->getBoard()->XYtoRC(_center);
-	return Game::instance()->getBoard()->cardAtRowCol((int)rc.x, (int)rc.y);
+	return (Game::instance()->getBoard()->cardAtRowCol((int)rc.x, (int)rc.y));
 }
 
 void Player::moveTo(float x, float y)
@@ -113,10 +116,12 @@ void Player::draw()
 		_center = Game::instance()->getBoard()->RCtoXY(Game::instance()->getBoard()->XYtoRC(_center));
 		glLineWidth(5.0f);
 		glBegin(GL_LINE_LOOP);
-			glColor4fv(_color.toArray());
+			glColor4fv(_color1.toArray());
 			glVertex2f(_center.x - Board::CARD_WIDTH/2.0f, _center.y + Board::CARD_HEIGHT/2.0f);
+			glColor4fv(_color2.toArray());
 			glVertex2f(_center.x - Board::CARD_WIDTH/2.0f, _center.y - Board::CARD_HEIGHT/2.0f);
 			glVertex2f(_center.x + Board::CARD_WIDTH/2.0f, _center.y - Board::CARD_HEIGHT/2.0f);
+			glColor4fv(_color1.toArray());
 			glVertex2f(_center.x + Board::CARD_WIDTH/2.0f, _center.y + Board::CARD_HEIGHT/2.0f);
 		glEnd();
 	}

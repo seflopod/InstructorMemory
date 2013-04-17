@@ -71,6 +71,14 @@ Card* Board::cardAtRowCol(int row, int col)
 			return (*it);
 }
 
+void Board::putAllCardsFaceDown()
+{
+	vector<Card*>::iterator it;
+	for(it=_cards.begin();it!=_cards.end();++it)
+		if((*it)->faceUp())
+			(*it)->flip();
+}
+
 void Board::destroy()
 {
 	//Since no pointers I think we're okay here.
