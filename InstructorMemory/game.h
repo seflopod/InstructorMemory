@@ -20,6 +20,7 @@
 #include "idrawable.h"
 #include "idrawablecompare.h"
 #include "iupdatable.h"
+#include "Texture2D.h"
 
 using std::vector;
 using std::priority_queue;
@@ -30,13 +31,14 @@ class Deck;
 class Card;
 class Player;
 
+
 class Game
 {
 public:
-	static const int WINDOW_WIDTH = 800;
-	static const int WINDOW_HEIGHT = 600;
-	static const int HBOUND = 800;
-	static const int VBOUND = 600;
+	static const int WINDOW_WIDTH = 1280;
+	static const int WINDOW_HEIGHT = 1000;
+	static const int HBOUND = 1280;
+	static const int VBOUND = 1000;
 	static const int FPS = 27;
 	
 	static Game* instance();
@@ -58,7 +60,7 @@ private:
 
 	Game();
 	
-	void loadAndBindTextures(int pairs);
+	void loadAndBindTextures();
 	//use this for when we can actually prompt for user info
 	//void createPlayers();
 	clock_t _currentTime;
@@ -66,6 +68,11 @@ private:
 	
 	priority_queue<IDrawable*, vector<IDrawable*>, IDrawableCompare> _drawables;
 	vector<IUpdatable*> _updatables;
+
+	int _cardPairs;
+	Texture2D** _cardFaceT2D;
+	Texture2D* _cardBackT2D;
+	Texture2D* _boardT2D;
 	GLuint* _cardFaceTexIds;
 	GLuint _cardBackTexId;
 	GLuint _boardTexId;

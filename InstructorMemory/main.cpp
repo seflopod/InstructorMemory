@@ -164,7 +164,8 @@ int main(int argc, char** argv)
 	glutCreateWindow("Instructor Memory - A Peter & Ross Joint");
 
 	initOpenGL();
-	Game::instance()->init(1);
+	//difficulty goes from 1 to 5, with 2*difficulty pairs of cards
+	Game::instance()->init(5);
 
 	glutDisplayFunc(Game::display);
 	glutReshapeFunc(reshape);

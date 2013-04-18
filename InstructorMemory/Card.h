@@ -72,7 +72,7 @@ public:
 	 * returns: A GLuint for the id of the face texture.
 	 *
 	 */
-	GLuint getFaceTextureId();
+	GLuint getFaceTextureId() const;
 
 	/*setFaceTextureId(faceTex)
 	 * takes: A GLuint for the id of the face texture.
@@ -86,7 +86,7 @@ public:
 	 * returns: A GLuint for the id of the back texture.
 	 *
 	 */
-	GLuint getBackTextureId();
+	GLuint getBackTextureId() const;
 
 	/*setBackTextureId(backTex)
 	 * takes: A GLuint for the id of the back texture.
@@ -110,6 +110,11 @@ public:
 	virtual int getPriority();
 	virtual void setPriority(int);
 	virtual void draw();
+
+	//Operator overloads
+	//equality checks
+	bool operator==(const Card &rhs);
+	bool operator!=(const Card &rhs);
 private:
 	Vector2 _rowCol;
 	bool _canDraw;

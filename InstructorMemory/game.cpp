@@ -2,6 +2,7 @@
 #include "game.h"
 #endif
 
+#include <string>
 #include "player.h"
 #include "deck.h"
 #include "Board.h"
@@ -21,8 +22,6 @@ Game::Game()
 	_cardBackTexId = 0;
 	_boardTexId = 0;
 	_playerTexId = 0;
-    //_drawables = priority_queue<IDrawable*>();
-    _updatables = vector<IUpdatable*>();
 	_curPlayer = 0;
 	_currentSelect = 0;
 }
@@ -68,8 +67,10 @@ void Game::update(int value)
 //NOTE: no pointer checks are done, this is rather unsafe
 void Game::init(int difficulty)
 {
-    int pairs = difficulty*2;
-    loadAndBindTextures(pairs);
+	difficulty = (difficulty<1)?1:difficulty;
+	difficulty = (difficulty>5)?5:difficulty;
+    _cardPairs = difficulty*2;
+    loadAndBindTextures();
     
     //create the Board
     int rows = 4, cols = 5;
@@ -85,16 +86,18 @@ void Game::init(int difficulty)
     for(int i=0;i<10;++i)
     {
         tmpC = new Card();
-        //tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx], _cardBackTexId);
-		tmpC->init(Vector2(), 0, 0);
+        tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx], _cardBackTexId);
 		tmpC->enable(); //let this card draw
         _deck->placeCardOnDeck(tmpC);
         
         tmpC = new Card();
-        //tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx++], _cardBackTexId);
-		tmpC->init(Vector2(), 0, 0);
+        tmpC->init(Vector2(), _cardFaceTexIds[cardTexIdx++], _cardBackTexId);
 		tmpC->enable(); //let this card draw
         _deck->placeCardOnDeck(tmpC);
+
+		//make sure we aren't adding garbage
+		if(cardTexIdx >= _cardPairs)
+			cardTexIdx = 0;
     }
     tmpC = 0;
     _deck->shuffleDeck();
@@ -167,9 +170,75 @@ void Game::destroy()
     _deck->destroy();
     _players[0]->destroy();
     _players[1]->destroy();
+	for(int i=0;i<_cardPairs;++i)
+		_cardFaceT2D[i]->destroy();
+	_cardBackT2D->destroy();
+	_boardT2D->destroy();
 }
 
-void Game::loadAndBindTextures(int pairs)
+void Game::loadAndBindTextures()
 {
 	//TODO: code for actually loading textures when we have those.
+
+	//Here's where we load in all of the face textures used in the game.
+	//Rather than learn to make an atlas/sprite sheet, we just loop over
+	//an array and change the file name each time.
+	_cardFaceT2D = new Texture2D*[_cardPairs];
+	_cardFaceTexIds = new GLuint[_cardPairs];
+	std::string faceBase = ".\\Content\\face";
+	std::string ext = ".bmp";
+	//we will not have more than 10 card face textures, so we'll take advantage
+	//of that here.
+	std::string fileNum = "00";
+	int faceNum = 1;
+	for(int i=0;i<_cardPairs;++i)
+	{
+		//generate file name
+		if(i+1<10)
+			fileNum[1] = (char)(i+49);
+		else
+			fileNum = "10";
+		//load texture file
+		//_cardFaceT2D[i] = new Texture2D(faceBase+fileNum+ext);
+		_cardFaceT2D[i] = new Texture2D(faceBase+fileNum+ext);
+		//bind the texture in GL
+		glGenTextures(1, &_cardFaceTexIds[i]);
+		glBindTexture(GL_TEXTURE_2D, _cardFaceTexIds[i]);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, (_cardFaceT2D[i])->width,
+						(_cardFaceT2D[i])->height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+						(_cardFaceT2D[i])->pixels);
+	}
+
+	//This is less looping, but basically the same.  We'll load the back texure
+	//of the cards now.
+	_cardBackT2D = new Texture2D(".\\Content\\back.bmp");
+
+	//bind the texture in GL
+	glGenTextures(1, &_cardBackTexId);
+	glBindTexture(GL_TEXTURE_2D, _cardBackTexId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _cardBackT2D->width,
+					_cardBackT2D->height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+					_cardBackT2D->pixels);
+
+	//load and bind the board texture, same process
+	_boardT2D = new Texture2D(".\\Content\\board.bmp");
+
+	//bind the texture in GL
+	glGenTextures(1, &_boardTexId);
+	glBindTexture(GL_TEXTURE_2D, _boardTexId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _boardT2D->width,
+					_boardT2D->height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+					_boardT2D->pixels);
 }
