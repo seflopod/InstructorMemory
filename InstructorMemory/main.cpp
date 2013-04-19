@@ -127,6 +127,8 @@ void mouseButton(int button,int state,int x,int y)
 		{
 		case LEFT_MOUSE:
 			{
+				//make sure player location is under mouse
+				Game::instance()->getCurrentPlayer()->moveTo(newX, newY);
 				Game::instance()->leftClick();
 			}
 		case RIGHT_MOUSE:

@@ -76,7 +76,6 @@ void Player::moveTo(float x, float y)
 	Vector3 potC = Game::instance()->getBoard()->RCtoXY(rc);
 	if(potC != _center)
 		_center = potC;
-	cerr << rc << "->" << _center << endl;
 }
 
 void Player::destroy()

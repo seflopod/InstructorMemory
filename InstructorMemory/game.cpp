@@ -2,12 +2,16 @@
 #include "game.h"
 #endif
 
+#include <iostream>
 #include <string>
 #include "player.h"
 #include "deck.h"
 #include "Board.h"
 #include "Card.h"
 #include "colorscheme.h"
+
+using std::cerr;
+using std::endl;
 
 Game* Game::_instance = 0;
 
@@ -109,6 +113,9 @@ void Game::init(int difficulty)
             _board->placeCardOnBoard(r, c, _deck->dealCard());
     }
     
+	//allow Board to update
+	_board->enableUpdates();
+
     //add Players
     //this will change significantly when we actually add ai
 	_curPlayer = 0;
@@ -157,10 +164,14 @@ void Game::leftClick()
 		}
 		else
 		{
-			//Check card equality
-			_currentSelect->flip();
-			_currentSelect = 0;
-			switchPlayers();
+			if(tmp != _currentSelect) //not the same Card object
+			{
+				if(*tmp == *_currentSelect)
+					cerr << "Cards are equal!" << endl;
+				//Check card equality
+				_board->putAllCardsFaceDown();
+				_currentSelect = 0;
+			}
 		}
 	}
 }

@@ -14,6 +14,8 @@ Board::Board()
 	_canDraw = false;
 	_drawPriority = -1;
 	_cards = vector<Card*>();
+	_flipAll = false;
+	_flipTimer = -1.0f;
 }
 
 void Board::init(int rows, int cols)
@@ -25,6 +27,7 @@ void Board::init(int rows, int cols)
 	_center = Vector3(Game::WINDOW_WIDTH/2.0f, Game::WINDOW_HEIGHT/2.0f, 0.0f);
 	_drawPriority = 2;
 	Game::instance()->registerDrawable((IDrawable*)this);
+	Game::instance()->registerUpdatable((IUpdatable*)this);
 }
 
 Vector2 Board::XYtoRC(Vector3& xy)
@@ -73,15 +76,42 @@ Card* Board::cardAtRowCol(int row, int col)
 
 void Board::putAllCardsFaceDown()
 {
-	vector<Card*>::iterator it;
-	for(it=_cards.begin();it!=_cards.end();++it)
-		if((*it)->faceUp())
-			(*it)->flip();
+	_flipAll = true;
+	_flipTimer = 1000.0f; // in ms, I think
 }
 
 void Board::destroy()
 {
 	//Since no pointers I think we're okay here.
+}
+
+void Board::enableUpdates() { _canUpdate = true; }
+void Board::disableUpdates() { _canUpdate = false; }
+bool Board::canUpdate() { return _canUpdate; }
+
+void Board::update(float dt)
+{
+	if(!_canUpdate)
+		return;
+
+	if(_flipAll)
+	{
+		if(_flipTimer > 0)
+			_flipTimer-=dt;
+		else
+		{
+			for(vector<Card*>::iterator it=_cards.begin();it!=_cards.end();++it)
+			{
+				if((*it)->faceUp())
+					(*it)->flip();
+			}
+			_flipAll = false;
+			
+			//tell Game it's okay to switch players now
+			//this prevents ambiguity when all cards are flipping
+			Game::instance()->switchPlayers();
+		}
+	}
 }
 
 void Board::enable() { _canDraw = true; }

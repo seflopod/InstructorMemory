@@ -18,6 +18,7 @@
 
 #include <vector>
 #include "idrawable.h"
+#include "iupdatable.h"
 #include "vector2.h"
 #include "vector3.h"
 
@@ -25,7 +26,7 @@ using std::vector;
 
 class Card;
 
-class Board : public IDrawable
+class Board : public IDrawable, public IUpdatable
 {
 public:
 	//The Board needs to know how big Cards are in order to properly
@@ -122,6 +123,12 @@ public:
      */
     void destroy();
     
+	//IUpdatable implementation
+	virtual void enableUpdates();
+	virtual void disableUpdates();
+	virtual bool canUpdate();
+	virtual void update(float dt);
+
     //IDrawable implementation
     virtual void enable();
     virtual void disable();
@@ -130,6 +137,9 @@ public:
     virtual void setPriority(int);
     virtual void draw();
 private:
+	bool _canUpdate;
+	bool _flipAll;
+	float _flipTimer;
     Vector3 _center;
     int _rows;
     int _cols;
