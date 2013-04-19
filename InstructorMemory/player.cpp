@@ -86,9 +86,10 @@ void Player::setPriority(int newPriority) { _drawPriority = newPriority; }
 
 void Player::draw()
 {
-	if(_canDraw)
+	//"normalize" _center to the center of a Card slot on the board
+	_center = Game::instance()->getBoard()->RCtoXY(Game::instance()->getBoard()->XYtoRC(_center));
+	if(_canDraw && selectCard() != 0)
 	{
-		_center = Game::instance()->getBoard()->RCtoXY(Game::instance()->getBoard()->XYtoRC(_center));
 		glLineWidth(5.0f);
 		glBegin(GL_LINE_LOOP);
 			glColor4fv(_color1.toArray());

@@ -83,6 +83,7 @@ Card* Board::cardAtRowCol(int row, int col)
 	for(it=_cards.begin();it!=_cards.end();++it)
 		if((*it)->getRowCol().x==(float)row && (*it)->getRowCol().y==(float)col)
 			return (*it);
+	return 0;
 }
 
 void Board::putAllCardsFaceDown()
@@ -139,9 +140,9 @@ void Board::draw()
 	Color4 myColor = ColorScheme::GREEN;
 	glBegin(GL_QUADS);
 		glColor4fv(myColor.toArray());
-		glVertex2f(_center.x - Game::WINDOW_WIDTH/2.0f, _center.y - Game::WINDOW_HEIGHT/2.0f);
-		glVertex2f(_center.x + Game::WINDOW_WIDTH/2.0f, _center.y - Game::WINDOW_HEIGHT/2.0f);
-		glVertex2f(_center.x + Game::WINDOW_WIDTH/2.0f, _center.y + Game::WINDOW_HEIGHT/2.0f);
-		glVertex2f(_center.x - Game::WINDOW_WIDTH/2.0f, _center.y + Game::WINDOW_HEIGHT/2.0f);
+		glVertex2f(_center.x - Game::HBOUND/2.0f, _center.y - Game::VBOUND/2.0f);
+		glVertex2f(_center.x + Game::HBOUND/2.0f, _center.y - Game::VBOUND/2.0f);
+		glVertex2f(_center.x + Game::HBOUND/2.0f, _center.y + Game::VBOUND/2.0f);
+		glVertex2f(_center.x - Game::HBOUND/2.0f, _center.y + Game::VBOUND/2.0f);
 	glEnd();
 }

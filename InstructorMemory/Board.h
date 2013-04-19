@@ -33,10 +33,10 @@ public:
 	//do coordinate conversions.  The Board will define the size of
 	//each card for uniformity.  This is static to get around the 
 	//fact that this is probably bad design.
-	static const int CARD_WIDTH = 90;
-	static const int CARD_HEIGHT = 140;
+	static const int CARD_WIDTH = 135;
+	static const int CARD_HEIGHT = 210;
 	static const int SIDE_MARGIN = 25;
-	static const int CARD_HMARGIN = 75;
+	static const int CARD_HMARGIN = 8;
 	static const int VERT_MARGIN = 8;
 	static const int CARD_VMARGIN = 8;
 

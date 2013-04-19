@@ -36,9 +36,9 @@ class Game
 {
 public:
 	static const int WINDOW_WIDTH = 1280;
-	static const int WINDOW_HEIGHT = 1000;
+	static const int WINDOW_HEIGHT = 880;
 	static const int HBOUND = 1280;
-	static const int VBOUND = 1000;
+	static const int VBOUND = 880;
 	static const int FPS = 27;
 	
 	static Game* instance();

@@ -38,7 +38,6 @@ void initOpenGL()
 
 void reshape(int width, int height)
 {
-	//no reshape for you!
 	glutReshapeWindow(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
 	glViewport(0,0,Game::HBOUND, Game::VBOUND);
 
@@ -123,7 +122,7 @@ int main(int argc, char** argv)
 	windowWidth = Game::WINDOW_WIDTH;
 	windowHeight = Game::WINDOW_HEIGHT;
 	glutInit(&argc, argv);
-	glutInitWindowPosition(500, 100);
+	glutInitWindowPosition(50, 10);
 	glutInitWindowSize(Game::WINDOW_WIDTH, Game::WINDOW_HEIGHT);
 	glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA);
 	glutCreateWindow("Instructor Memory - A Peter & Ross Joint");
