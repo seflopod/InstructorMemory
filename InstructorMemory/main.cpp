@@ -24,43 +24,6 @@ void initOpenGL();
 int windowWidth;
 int windowHeight;
 
-/*TODO: move this to Game when we are actually doing stuff with textures
-void buildTextures()
-{
-	boardT2D = new Texture2D("Content\\board.bmp");
-
-	glGenTextures(1, &boardTex);
-	glBindTexture(GL_TEXTURE_2D, boardTex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, boardT2D -> width, boardT2D -> height, 0, GL_RGB, GL_UNSIGNED_BYTE, boardT2D -> pixels);
-
-	cardBackT2D = new Texture2D("Content\\cardBack.bmp");
-
-	glGenTextures(1, &backTex);
-	glBindTexture(GL_TEXTURE_2D, backTex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cardBackT2D -> width, cardBackT2D -> height, 0, GL_RGB, GL_UNSIGNED_BYTE, cardBackT2D -> pixels);
-
-	cardFaceT2D = new Texture2D("Content\\cardFace.bmp");
-
-	glGenTextures(1, &faceTex);
-	glBindTexture(GL_TEXTURE_2D, faceTex);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-	
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, cardFaceT2D -> width, cardFaceT2D -> height, 0, GL_RGB, GL_UNSIGNED_BYTE, cardFaceT2D -> pixels);
-}*/
-
 void initOpenGL()
 {
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);

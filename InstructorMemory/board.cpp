@@ -2,10 +2,13 @@
 #include "board.h"
 #endif
 
+#include <iostream>
 #include "game.h"
 #include "Card.h"
 #include "colorscheme.h"
 
+using std::cerr;
+using std::endl;
 Board::Board()
 {
 	_center = Vector3();
@@ -60,10 +63,18 @@ void Board::placeCardOnBoard(int row, int col, Card* card)
 	_cards.push_back(card);
 }
 
-Card* Board::removeCardFromBoard(int row, int col)
+void Board::removeCardFromBoard(Card* card)
 {
-	//TODO: write this
-	return 0;
+	vector<Card*>::iterator it=_cards.begin();
+	while(it!=_cards.end())
+	{
+		if((*it) == card)
+		{
+			it = _cards.erase(it);
+			break; //should only get one match
+		}
+		++it;
+	}
 }
 
 Card* Board::cardAtRowCol(int row, int col)

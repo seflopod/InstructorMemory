@@ -95,12 +95,12 @@ public:
      */
     void placeCardOnBoard(int, int, Card*);
     
-    /*removeCardFromBoard(row, col)
-     * takes: the row and column for the card to remove
-     * returns: a poitner to the Card removed
+    /*removeCardFromBoard(card)
+     * takes: a pointer to the card to remove
+     * returns: nothing
      *
      */
-    Card* removeCardFromBoard(int, int);
+    void removeCardFromBoard(Card* card);
     
 	Card* cardAtRowCol(int row, int col);
 

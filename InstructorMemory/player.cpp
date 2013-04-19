@@ -18,51 +18,40 @@ using std::endl;
 
 Player::Player()
 {
-	bool _human = false;
-	bool _canDraw = false;
-
-	string _name = "";
-
-	Deck* _pairsDeck = new Deck();
+	_human = false;
+	_name = "";
+	_pairsDeck = 0;
+	_pairsFound = 0;
+	_canDraw = false;
+	_drawPriority = 0;
 	Vector3 _center = Vector3();
-
-	int _pairsFound = 0;
-	int _drawPriority = 0;
-	_color1 = ColorScheme::HERZING_GOLD_GRAD[0];
-	_color2 = ColorScheme::HERZING_GOLD_GRAD[1];
+	_color1 = ColorScheme::RED;
+	_color2 = ColorScheme::BLACK;
 }
 
+//right now not dealing with humanity, trying to figure out best way
 void Player::init(bool isHuman, const Color4 cGrad[2])
 {
 	_color1 = cGrad[0];
 	_color2 = cGrad[1];
+	//other inits
 	_drawPriority = 12;
 	Game::instance()->registerDrawable((IDrawable*)this);
-	if(isHuman)
-	{
-
-	}
+	_pairsDeck = new Deck();
+	_pairsDeck->init(0,0,20);
 }
 
-int Player::getPairsFound()
-{
-	return 0;
-}
-
-Deck* Player::getPairsDeck()
-{
-	return 0;
-}
+int Player::getPairsFound() { return _pairsFound; }
+Deck* Player::getPairsDeck() { return _pairsDeck; }
 
 void Player::addPair(Card* card)
 {
-
+	_pairsDeck->placeCardOnDeck(card);
+	++_pairsFound;
 }
 
-void Player::name(string newName)
-{
-
-}
+string Player::name() { return _name; }
+void Player::name(string newName) { _name = newName; }
 
 Card* Player::selectCard()
 {
@@ -80,33 +69,20 @@ void Player::moveTo(float x, float y)
 
 void Player::destroy()
 {
-
+	if(_pairsDeck != 0)
+	{
+		_pairsDeck->destroy();
+		delete _pairsDeck;
+		_pairsDeck = 0;
+	}
 }
 
-void Player::enable()
-{
-	_canDraw = true;
-}
-
-void Player::disable()
-{
-	_canDraw = false;
-}
-
-bool Player::isEnabled()
-{
-	return _canDraw;
-}
-
-int Player::getPriority()
-{
-	return _drawPriority;
-}
-
-void Player::setPriority(int newPriority)
-{
-	_drawPriority = newPriority;
-}
+//IDrawable
+void Player::enable() { _canDraw = true; }
+void Player::disable() { _canDraw = false; }
+bool Player::isEnabled() { return _canDraw; }
+int Player::getPriority() { return _drawPriority; }
+void Player::setPriority(int newPriority) { _drawPriority = newPriority; }
 
 void Player::draw()
 {

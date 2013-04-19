@@ -71,6 +71,8 @@ void Game::update(int value)
 //NOTE: no pointer checks are done, this is rather unsafe
 void Game::init(int difficulty)
 {
+	srand(time(NULL));
+
 	difficulty = (difficulty<1)?1:difficulty;
 	difficulty = (difficulty>5)?5:difficulty;
     _cardPairs = difficulty*2;
@@ -119,9 +121,14 @@ void Game::init(int difficulty)
     //add Players
     //this will change significantly when we actually add ai
 	_curPlayer = 0;
+	_players[0] = new Player();
 	_players[0]->init(true, ColorScheme::HERZING_WHITE_GRAD);
+	_players[0]->name("Player 1");
 	_players[0]->enable();
+
+	_players[1] = new Player();
 	_players[1]->init(true, ColorScheme::HERZING_GOLD_GRAD);
+	_players[1]->name("Player 2");
 	_players[1]->disable();
 }
 
@@ -167,8 +174,14 @@ void Game::leftClick()
 			if(tmp != _currentSelect) //not the same Card object
 			{
 				if(*tmp == *_currentSelect)
-					cerr << "Cards are equal!" << endl;
-				//Check card equality
+				{
+					tmp->disable();
+					_currentSelect->disable();
+					_board->removeCardFromBoard(_currentSelect);
+					_players[_curPlayer]->addPair(_currentSelect);
+					_board->removeCardFromBoard(tmp);
+					cerr << _players[_curPlayer]->name() << ": " << _players[_curPlayer]->getPairsFound() << endl;
+				}
 				_board->putAllCardsFaceDown();
 				_currentSelect = 0;
 			}
