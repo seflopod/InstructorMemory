@@ -60,6 +60,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="AIPlayer.h" />
     <ClInclude Include="board.h" />
     <ClInclude Include="Card.h" />
     <ClInclude Include="color3.h" />
@@ -78,6 +79,7 @@
     <ClInclude Include="vector3.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="AIPlayer.cpp" />
     <ClCompile Include="board.cpp" />
     <ClCompile Include="Card.cpp" />
     <ClCompile Include="colorscheme.cpp" />

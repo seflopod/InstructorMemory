@@ -30,7 +30,7 @@ Player::Player()
 }
 
 //right now not dealing with humanity, trying to figure out best way
-void Player::init(bool isHuman, const Color4 cGrad[2])
+void Player::init(const Color4 cGrad[2])
 {
 	_color1 = cGrad[0];
 	_color2 = cGrad[1];

@@ -77,6 +77,9 @@ void Board::removeCardFromBoard(Card* card)
 	}
 }
 
+//wow this is a terrible way to do this
+//should've had variables for number of rows and number of columns and done
+//offset calculations.
 Card* Board::cardAtRowCol(int row, int col)
 {
 	vector<Card*>::iterator it;

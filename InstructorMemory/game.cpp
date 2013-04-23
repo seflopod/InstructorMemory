@@ -122,12 +122,12 @@ void Game::init(int difficulty)
     //this will change significantly when we actually add ai
 	_curPlayer = 0;
 	_players[0] = new Player();
-	_players[0]->init(true, ColorScheme::HERZING_WHITE_GRAD);
+	_players[0]->init(ColorScheme::HERZING_WHITE_GRAD);
 	_players[0]->name("Player 1");
 	_players[0]->enable();
 
 	_players[1] = new Player();
-	_players[1]->init(true, ColorScheme::HERZING_GOLD_GRAD);
+	_players[1]->init(ColorScheme::HERZING_GOLD_GRAD);
 	_players[1]->name("Player 2");
 	_players[1]->disable();
 }

@@ -4,7 +4,7 @@
 #define _USE_MATHE_DEFINES
 #include <math.h>
 #include <time.h>
-
+#include <string>
 #include "Texture2D.h"
 #include "Card.h"
 #include "colorscheme.h"
@@ -141,3 +141,5 @@ int main(int argc, char** argv)
 	Game::instance()->destroy();
 	return 0;
 }
+
+

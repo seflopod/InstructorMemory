@@ -50,7 +50,7 @@ public:
 	 * needed inits.
 	 *
 	 */
-	void init(bool isHuman, const Color4 cGrad[2]);
+	virtual void init(const Color4 cGrad[2]);
 
 	/*getPairsFound()
 	 * takes: nothing
@@ -104,7 +104,7 @@ public:
 	 * If no Card exists at the passed position, NULL is returned.
 	 *
 	 */
-	Card* selectCard();
+	virtual Card* selectCard();
 
 	void moveTo(float x, float y);
 
