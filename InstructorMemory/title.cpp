@@ -29,7 +29,7 @@ void Title::init(GLuint bgTexture)
 		for(int j=0;j<3;++j)
 		{
 			_msgButtons[3*i+j] = new TitleButton();
-			_msgButtons[3*i+j]->init(MSG_TABLE[i][j], Vector3(595, 350-j*120, 0), 50, 225);
+			_msgButtons[3*i+j]->init(MSG_TABLE[i][j], Vector3(595, 300-j*100, 0), 50, 225);
 		}
 	}
 	Game::instance()->registerDrawable((IDrawable*)this);

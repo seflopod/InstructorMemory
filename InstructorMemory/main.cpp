@@ -20,6 +20,7 @@ void mouseButton(int button, int state, int x, int y);
 void mousePassive();
 void reshape(int w, int h);
 void initOpenGL();
+void dispHelp();
 
 int windowWidth;
 int windowHeight;
@@ -59,7 +60,7 @@ void keyboard(unsigned char key, int x, int y)
 	
 	case 27: glutLeaveMainLoop(); break;
 	case ' ': 
-	case 'r':
+	case 'h': dispHelp(); break;
 
 	default: break;
 	}
@@ -114,6 +115,19 @@ void mousePassive(int x, int y)
 		if(Game::instance()->getCurrentPlayer()->isHuman())
 			Game::instance()->getCurrentPlayer()->moveTo(newX, newY);
 	//TODO: write code for functionality re: Player and Mouse class
+	glutPostRedisplay();
+}
+
+void dispHelp()
+{
+	cerr << "	Help Menu\n" << endl;
+	cerr << "Left click on a card to flip it." << endl;
+	cerr << "After you flip a card try and match" << endl;
+	cerr << "that card with another on the board." << endl;
+	cerr << "You can do this by either guessing" << endl;
+	cerr << "or remembering a card that you flipped" << endl;
+	cerr << "earlier. The player with the most pairs" << endl;
+	cerr << "matched wins." << endl;
 }
 
 int main(int argc, char** argv)

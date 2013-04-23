@@ -22,6 +22,9 @@ public:
 	virtual void disableUpdates();
 	virtual bool canUpdate();
 	virtual void update(float dt);
+
+	//draw override
+	virtual void draw();
 private:
 	Card** _cardBuffer;
 	Card* _nextSelect;

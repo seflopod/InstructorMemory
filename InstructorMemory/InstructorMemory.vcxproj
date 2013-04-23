@@ -74,6 +74,7 @@
     <ClInclude Include="keyboard.h" />
     <ClInclude Include="mouse.h" />
     <ClInclude Include="player.h" />
+    <ClInclude Include="scoreboard.h" />
     <ClInclude Include="Texture2D.h" />
     <ClInclude Include="title.h" />
     <ClInclude Include="titlebutton.h" />
@@ -89,6 +90,7 @@
     <ClCompile Include="game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
+    <ClCompile Include="scoreboard.cpp" />
     <ClCompile Include="Texture2D.cpp" />
     <ClCompile Include="title.cpp" />
     <ClCompile Include="titlebutton.cpp" />

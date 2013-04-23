@@ -31,6 +31,7 @@ class Deck;
 class Card;
 class Player;
 class Title;
+class Scoreboard;
 
 class Game
 {
@@ -115,5 +116,7 @@ private:
 	Title* _title;
 	int _difficulty;
 	int _nHumans;
+
+	Scoreboard* _scoreboard;
 };
 #endif

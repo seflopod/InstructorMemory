@@ -12,6 +12,7 @@
 #include "colorscheme.h"
 #include "title.h"
 #include "titlebutton.h"
+#include "scoreboard.h"
 
 using std::cerr;
 using std::endl;
@@ -39,6 +40,7 @@ Game::Game()
 	_state = GameState::TitleState;
 	_title = 0;
 	_difficulty = 0;
+	_scoreboard = 0;
 }
 
 Game* Game::instance()
@@ -149,7 +151,8 @@ void Game::playingInit()
     int rows = 4, cols = 5;
     _board->init(rows, cols);
 	_board->enable(); //allow board to draw
-    //init the Deck
+    
+	//init the Deck
     _deck->init(0,0,20); //init the deck with no cards for ease
 
     //since we didn't add cards in init, add them all here
@@ -207,6 +210,10 @@ void Game::playingInit()
 		_players[1]->name("Player 2");
 		_players[1]->disable();
 	}
+
+	_scoreboard = new Scoreboard();
+	_scoreboard->init();
+	_scoreboard->enable();
 }
 
 void Game::registerDrawable(IDrawable* newDrawable)
@@ -282,6 +289,9 @@ void Game::playingLeftClick(float x, float y)
 	Card* tmp = _players[_curPlayer]->selectCard();
 	if(tmp != 0)
 	{
+		//check to see if only one player and if player selected card this time
+		//if so, this should be added to the ai player's buffer.
+
 		tmp->flip();
 		if(_currentSelect == 0) //first selection
 		{

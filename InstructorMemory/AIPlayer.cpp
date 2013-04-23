@@ -2,16 +2,20 @@
 #include "AIPlayer.h"
 #endif
 
+#include <iostream>
 #include <random>
 #include "game.h"
 #include "color4.h"
 #include "Card.h"
 #include "Board.h"
 
+using std::cerr;
+using std::endl;
+
 AIPlayer::AIPlayer()
 {
-	_cardBuffer = 0;
 	_maxBufferSize = 0;
+	_cardBuffer = 0;
 	_cardsRemembered = 0;
 	_selectedOneCard = false;
 	_canUpdate = false;
@@ -38,13 +42,13 @@ void AIPlayer::init(const Color4 cGrad[2])
 {
 	Player::init(cGrad);
 	_human = false;
-	_flipWait = 0.5f;
+	_flipWait = 1.0f;
 	Game::instance()->registerUpdatable((IUpdatable*)this);
 }
 
 Card* AIPlayer::selectCard()
 {
-	Card* ret;
+	Card* ret = 0;
 	if(!_selectedOneCard) //beginning of turn
 	{
 		//first check to see if there are any pairs the player's missed
@@ -64,6 +68,7 @@ Card* AIPlayer::selectCard()
 					_selectedOneCard = true;
 					_flipTimer = 0.0f;
 					_canUpdate = true;
+					_selected = tmp;
 					return tmp;
 				}
 			}
@@ -89,6 +94,7 @@ Card* AIPlayer::selectCard()
 		ret = findCardToSelect();
 	}
 
+	_selected = ret;
 	_selectedOneCard = !_selectedOneCard;
 	//move to the possible card's position
 	//should really try to get this to force a draw while looking to get a cool
@@ -97,6 +103,8 @@ Card* AIPlayer::selectCard()
 	Vector3 newPos = Game::instance()->getBoard()->RCtoXY(Vector2((float)rc.x, (float)rc.y));
 	moveTo(newPos.x, newPos.y);
 	
+	if(!_selectedOneCard) _selected = 0;
+
 	return ret;
 }
 
@@ -126,7 +134,7 @@ void AIPlayer::update(float dt)
 {
 	if(!_canUpdate)
 		return;
-
+	
 	_flipTimer+=dt;
 	if(_flipTimer >= _flipWait)
 	{
@@ -147,7 +155,7 @@ Card* AIPlayer::findCardToSelect()
 		//using magic numbers here because of design flaws
 		int row = rand()%4;
 		int col = rand()%5;
-		Card* tmp = Game::instance()->getBoard()->cardAtRowCol(row, col);
+		tmp = Game::instance()->getBoard()->cardAtRowCol(row, col);
 			
 		//make sure the slot we select has a card in it
 		while(tmp == 0)
@@ -197,4 +205,23 @@ Card* AIPlayer::findCardToSelect()
 	_canUpdate = true;
 
 	return tmp;
+}
+
+void AIPlayer::draw()
+{
+	//"normalize" _center to the center of a Card slot on the board
+	_center = Game::instance()->getBoard()->RCtoXY(Game::instance()->getBoard()->XYtoRC(_center));
+	if(_canDraw && _selected != 0)
+	{
+		glLineWidth(5.0f);
+		glBegin(GL_LINE_LOOP);
+			glColor4fv(_color1.toArray());
+			glVertex2f(_center.x - Board::CARD_WIDTH/2.0f, _center.y + Board::CARD_HEIGHT/2.0f);
+			glColor4fv(_color2.toArray());
+			glVertex2f(_center.x - Board::CARD_WIDTH/2.0f, _center.y - Board::CARD_HEIGHT/2.0f);
+			glVertex2f(_center.x + Board::CARD_WIDTH/2.0f, _center.y - Board::CARD_HEIGHT/2.0f);
+			glColor4fv(_color1.toArray());
+			glVertex2f(_center.x + Board::CARD_WIDTH/2.0f, _center.y + Board::CARD_HEIGHT/2.0f);
+		glEnd();
+	}
 }

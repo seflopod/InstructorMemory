@@ -128,7 +128,6 @@ public:
 
 protected:
 	bool _human;
-private:
 	string _name;
 	Deck* _pairsDeck;
 	int _pairsFound;
