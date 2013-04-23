@@ -23,7 +23,7 @@ public:
 	static const Color4 GREEN;
 	static const Color4 RED;
 	static const Color4 YELLOW;
-	static const Color4 HERZING_GOLD_GRAD[];
-	static const Color4 HERZING_WHITE_GRAD[];
+	static const Color4 HERZING_GOLD_GRAD[2];
+	static const Color4 HERZING_WHITE_GRAD[2];
 };
 #endif

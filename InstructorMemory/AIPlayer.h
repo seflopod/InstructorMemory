@@ -4,7 +4,7 @@
 #include "player.h"
 #include "iupdatable.h"
 
-class AIPlayer : Player, IUpdatable
+class AIPlayer : public Player, public IUpdatable
 {
 public:
 	AIPlayer();
@@ -25,11 +25,16 @@ public:
 private:
 	Card** _cardBuffer;
 	Card* _nextSelect;
+	Card* _selected;
 	int _maxBufferSize;
 	int _cardsRemembered;
+	int _bufferIdx;
 	bool _selectedOneCard;
 	bool _canUpdate;
 	float _flipTimer;
+	float _flipWait;
+
+	Card* findCardToSelect();
 
 };
 #endif

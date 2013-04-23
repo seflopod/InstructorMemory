@@ -66,6 +66,12 @@
     <ClInclude Include="AIPlayer.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="title.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="titlebutton.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="vector3.cpp">
@@ -99,6 +105,12 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="AIPlayer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="title.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="titlebutton.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -5,10 +5,13 @@
 #include <iostream>
 #include <string>
 #include "player.h"
+#include "AIPlayer.h"
 #include "deck.h"
 #include "Board.h"
 #include "Card.h"
 #include "colorscheme.h"
+#include "title.h"
+#include "titlebutton.h"
 
 using std::cerr;
 using std::endl;
@@ -22,12 +25,20 @@ Game::Game()
     _players[0] = new Player();
     _players[1] = new Player();
     _deck = new Deck();
+
+	_cardFaceT2D = 0;
+	_cardBackT2D = 0;
+	_boardT2D = 0;
+	_titleT2D = 0;
     _cardFaceTexIds = 0;
 	_cardBackTexId = 0;
 	_boardTexId = 0;
 	_playerTexId = 0;
 	_curPlayer = 0;
 	_currentSelect = 0;
+	_state = GameState::TitleState;
+	_title = 0;
+	_difficulty = 0;
 }
 
 Game* Game::instance()
@@ -68,14 +79,70 @@ void Game::update(int value)
     glutPostRedisplay();
 }
 
+Game::GameState Game::state()
+{
+	return instance()->_state;
+}
+
+void Game::state(Game::GameState newState)
+{
+	if(newState != instance()->_state)
+	{
+		instance()->_state = newState;
+		switch(newState) //just didn't want to dereference
+		{
+		case GameState::TitleState:
+			instance()->titleInit();
+			break;
+		case GameState::Playing:
+			instance()->playingInit();
+			break;
+		case GameState::GameOver:
+			glutLeaveMainLoop();
+			break;
+		default:
+			break;
+		}
+	}
+}
+
 //NOTE: no pointer checks are done, this is rather unsafe
-void Game::init(int difficulty)
+void Game::init()
 {
 	srand(time(NULL));
+	_state = GameState::TitleState;
+	titleInit();
+}
 
-	difficulty = (difficulty<1)?1:difficulty;
-	difficulty = (difficulty>5)?5:difficulty;
-    _cardPairs = difficulty*2;
+void Game::titleInit()
+{
+	_title = new Title();
+
+	//load the texture for the title
+	//this is needed due to the varying size of the texture loading for
+	//difficulty settings, which first require the title screen.  it's not the
+	//best setup, but at this hour we make do.
+	_titleT2D = new Texture2D(".\\Content\\titleScreen.bmp");
+
+	//bind the texture in GL
+	glGenTextures(1, &_titleTexId);
+	glBindTexture(GL_TEXTURE_2D, _titleTexId);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, _titleT2D->width,
+					_titleT2D->height, 0, GL_RGB, GL_UNSIGNED_BYTE,
+					_titleT2D->pixels);
+
+	//now we actually init the title screen
+	_title->init(_titleTexId);
+	_title->enable();
+}
+
+void Game::playingInit()
+{
+    _cardPairs = _difficulty*2;
     loadAndBindTextures();
     
     //create the Board
@@ -126,10 +193,20 @@ void Game::init(int difficulty)
 	_players[0]->name("Player 1");
 	_players[0]->enable();
 
-	_players[1] = new Player();
-	_players[1]->init(ColorScheme::HERZING_GOLD_GRAD);
-	_players[1]->name("Player 2");
-	_players[1]->disable();
+	if(_nHumans == 2)
+	{
+		_players[1] = new Player();
+		_players[1]->init(ColorScheme::HERZING_GOLD_GRAD);
+		_players[1]->name("Player 2");
+		_players[1]->disable();
+	}
+	else
+	{
+		_players[1] = (Player*)(new AIPlayer(_difficulty));
+		((AIPlayer*)_players[1])->init(ColorScheme::HERZING_GOLD_GRAD);
+		_players[1]->name("Player 2");
+		_players[1]->disable();
+	}
 }
 
 void Game::registerDrawable(IDrawable* newDrawable)
@@ -143,6 +220,16 @@ void Game::registerUpdatable(IUpdatable* newUpdatable)
 }
 
 Board* Game::getBoard() { return _board; }
+
+//Accessors for Players
+int Game::getNumberOfHumans() { return _nHumans; }
+void Game::setNumberOfHumans(int nHumans)
+{
+	if(nHumans > 2) nHumans = 2;
+	if(nHumans < 1) nHumans = 1;
+	_nHumans = nHumans;
+}
+
 Player* Game::getPlayer(int number)
 {
     if(number >= 0 && number < 2)
@@ -159,8 +246,39 @@ void Game::switchPlayers()
 	_players[_curPlayer]->enable();
 }
 
-void Game::leftClick()
+int Game::getDifficulty() { return _difficulty; }
+void Game::setDifficulty(int difficulty)
 {
+	difficulty = (difficulty<1)?1:difficulty;
+	difficulty = (difficulty>5)?5:difficulty;
+	_difficulty = difficulty;
+}
+
+
+//LEFT CLICK STUFF
+void Game::leftClick(float x, float y)
+{
+	switch(_state)
+	{
+	case GameState::TitleState:
+		titleLeftClick(x, y);
+		break;
+	case GameState::Playing:
+		playingLeftClick(x, y);
+		break;
+	default:
+		break;
+	}
+}
+
+void Game::titleLeftClick(float x, float y)
+{
+	_title->procClick(x, y);
+}
+
+void Game::playingLeftClick(float x, float y)
+{
+	_players[_curPlayer]->moveTo(x, y);
 	Card* tmp = _players[_curPlayer]->selectCard();
 	if(tmp != 0)
 	{
@@ -194,10 +312,16 @@ void Game::destroy()
     _deck->destroy();
     _players[0]->destroy();
     _players[1]->destroy();
+
 	for(int i=0;i<_cardPairs;++i)
-		_cardFaceT2D[i]->destroy();
-	_cardBackT2D->destroy();
-	_boardT2D->destroy();
+	{
+		if(_cardFaceT2D[i] != 0)
+			_cardFaceT2D[i]->destroy();
+	}
+
+	if(_cardBackT2D != 0) _cardBackT2D->destroy();
+	if(_boardT2D != 0) _boardT2D->destroy();
+	if(_titleT2D != 0) _titleT2D->destroy();
 }
 
 void Game::loadAndBindTextures()

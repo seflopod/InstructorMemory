@@ -75,6 +75,8 @@
     <ClInclude Include="mouse.h" />
     <ClInclude Include="player.h" />
     <ClInclude Include="Texture2D.h" />
+    <ClInclude Include="title.h" />
+    <ClInclude Include="titlebutton.h" />
     <ClInclude Include="vector2.h" />
     <ClInclude Include="vector3.h" />
   </ItemGroup>
@@ -88,6 +90,8 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="player.cpp" />
     <ClCompile Include="Texture2D.cpp" />
+    <ClCompile Include="title.cpp" />
+    <ClCompile Include="titlebutton.cpp" />
     <ClCompile Include="vector2.cpp" />
     <ClCompile Include="vector3.cpp" />
   </ItemGroup>

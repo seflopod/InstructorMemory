@@ -28,7 +28,7 @@ void initOpenGL()
 {
 	glutSetOption(GLUT_ACTION_ON_WINDOW_CLOSE, GLUT_ACTION_GLUTMAINLOOP_RETURNS);
 
-	glClearColor(0,0,0,0);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0,Game::HBOUND, 0,Game::VBOUND, -1.0f, 1.0f);
@@ -43,7 +43,7 @@ void reshape(int width, int height)
 
 	windowWidth = Game::WINDOW_WIDTH;
 	windowHeight = Game::WINDOW_HEIGHT;
-
+	
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
 	glOrtho(0,Game::HBOUND, 0,Game::VBOUND, -1.0f, 1.0f);
@@ -88,15 +88,10 @@ void mouseButton(int button,int state,int x,int y)
 		switch(button)
 		{
 		case LEFT_MOUSE:
-			{
-				//make sure player location is under mouse
-				Game::instance()->getCurrentPlayer()->moveTo(newX, newY);
-				Game::instance()->leftClick();
-			}
+			Game::instance()->leftClick(newX, newY);
+			break;
 		case RIGHT_MOUSE:
-			{
-
-			}
+			break;
 		default: break;
 		}
 	}
@@ -113,7 +108,11 @@ void mousePassive(int x, int y)
 	float newX = (x/(windowWidth/2.0f) * Game::HBOUND + Game::HBOUND)/2; //technically xBound
 	float newY = (y/(windowHeight/2.0f) * Game::VBOUND + Game::VBOUND)/2; //technically yBound.
 	//cerr << newX << ", " << newY << endl;
-	Game::instance()->getCurrentPlayer()->moveTo(newX, newY);
+
+	//This should be just passed off, but for now I'm doing real work
+	if(Game::state() == Game::GameState::Playing)
+		if(Game::instance()->getCurrentPlayer()->isHuman())
+			Game::instance()->getCurrentPlayer()->moveTo(newX, newY);
 	//TODO: write code for functionality re: Player and Mouse class
 }
 
@@ -129,7 +128,7 @@ int main(int argc, char** argv)
 
 	initOpenGL();
 	//difficulty goes from 1 to 5, with 2*difficulty pairs of cards
-	Game::instance()->init(5);
+	Game::instance()->init();
 
 	glutDisplayFunc(Game::display);
 	glutReshapeFunc(reshape);
@@ -141,5 +140,3 @@ int main(int argc, char** argv)
 	Game::instance()->destroy();
 	return 0;
 }
-
-

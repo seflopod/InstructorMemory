@@ -126,8 +126,9 @@ public:
 	virtual void setPriority(int);
 	virtual void draw();
 
-private:
+protected:
 	bool _human;
+private:
 	string _name;
 	Deck* _pairsDeck;
 	int _pairsFound;

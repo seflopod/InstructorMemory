@@ -35,6 +35,7 @@ void Player::init(const Color4 cGrad[2])
 	_color1 = cGrad[0];
 	_color2 = cGrad[1];
 	//other inits
+	_human = true; //AI overrides this to false
 	_drawPriority = 12;
 	Game::instance()->registerDrawable((IDrawable*)this);
 	_pairsDeck = new Deck();
@@ -49,6 +50,8 @@ void Player::addPair(Card* card)
 	_pairsDeck->placeCardOnDeck(card);
 	++_pairsFound;
 }
+
+bool Player::isHuman() { return _human; }
 
 string Player::name() { return _name; }
 void Player::name(string newName) { _name = newName; }
